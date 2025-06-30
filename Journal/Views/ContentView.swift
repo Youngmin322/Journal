@@ -80,14 +80,14 @@ struct ContentView: View {
                     }) {
                         ZStack {
                             Circle()
-                                .fill(Color.blue)
+                                .fill(Color.white)
                                 .frame(width: 56, height: 56)
-                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                            
+                                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 5)
+
                             Image(systemName: "plus")
                                 .font(.title2)
-                                .fontWeight(.medium)
-                                .foregroundColor(.white)
+                                .fontWeight(.bold)
+                                .foregroundColor(.purple)
                         }
                     }
                     .padding(.bottom, 40)

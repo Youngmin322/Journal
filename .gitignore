@@ -1,0 +1,33 @@
+# Xcode
+.DS_Store
+*.xcuserstate
+*.xcscmblueprint
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# DerivedData
+DerivedData/
+build/
+
+# SwiftPM
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# SwiftData, CoreData
+*.sqlite*
+*.momd
+
+# Logs
+*.log
+
+# Cache
+*.xcuserstate
+*.idea/
+*.vscode/
+
+# Other
+*.swp
+*.lock

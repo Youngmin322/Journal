@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct HomeView: View {
     
     var body: some View {
         GeometryReader { geometry in
@@ -55,6 +55,7 @@ struct ContentView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 80, height: 80)
+                        .cornerRadius(20)
                     
                     VStack(spacing: 12) {
                         Text("일기 쓰기 시작하기")

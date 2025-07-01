@@ -148,7 +148,7 @@ struct HomeView: View {
         @State private var showingWriteView = false
         
         var groupedEntries: [String: [JournalEntry]] {
-            let calendar = Calendar.current
+            _ = Calendar.current
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.dateFormat = "yyyy년 M월"

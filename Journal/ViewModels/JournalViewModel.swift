@@ -1,5 +1,5 @@
 //
-//  HomeViewModel.swift
+//  JournalViewModel.swift
 //  Journal
 //
 //  Created by 조영민 on 7/1/25.
@@ -10,7 +10,7 @@ import SwiftData
 import SwiftUI
 
 @Observable
-class HomeViewModel {
+class JournalViewModel {
     private var modelContext: ModelContext
     var journalEntries: [JournalEntry] = []
     

@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @State private var showWriting = false
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -44,7 +46,7 @@ struct HomeView: View {
                 }
 
                 Button(action: {
-                    //TODO: 새 일기 작성 액션
+                    showWriting = true
                 }) {
                     ZStack {
                         Circle()
@@ -59,6 +61,13 @@ struct HomeView: View {
                     }
                 }
                 .padding(.bottom, 40)
+            }
+            .sheet(isPresented: $showWriting) {
+                if let modelContext = try? ModelContext(ModelContainer(for: JournalEntry.self)) {
+                    WriteView(viewModel: JournalViewModel(modelContext: modelContext, journalEntries: []))
+                } else {
+                    Text("모델 컨텍스트 생성 실패")
+                }
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("일기")

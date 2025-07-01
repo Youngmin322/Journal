@@ -34,33 +34,33 @@ struct WriteView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button {
-                } label: {
-                    Image(systemName: "bookmark")
-                        .foregroundColor(.purple)
-                }
-
-                Spacer()
-
-                Text(formatDate(selectedDate))
-                    .font(.headline)
-
-                Spacer()
-
-                HStack(spacing: 16) {
+            ZStack {
+                HStack {
                     Button {
                     } label: {
-                        Image(systemName: "ellipsis")
+                        Image(systemName: "bookmark")
                             .foregroundColor(.purple)
                     }
-
-                    Button("완료") {
-                        saveJournalEntry()
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 16) {
+                        Button {
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .foregroundColor(.purple)
+                        }
+                        
+                        Button("완료") {
+                            saveJournalEntry()
+                        }
+                        .foregroundColor(.purple)
+                        .disabled(!isFormValid)
                     }
-                    .foregroundColor(.purple)
-                    .disabled(!isFormValid)
                 }
+                
+                Text(formatDate(selectedDate))
+                    .font(.headline)
             }
             .padding(.horizontal)
             .padding(.vertical, 12)

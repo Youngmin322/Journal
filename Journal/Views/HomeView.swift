@@ -9,7 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var showWriting = false
+    @State private var viewModel: JournalViewModel?
+    @State private var searchText = ""
+    @State private var showingSearch = false
 
     var body: some View {
         NavigationStack {

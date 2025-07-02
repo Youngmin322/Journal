@@ -14,10 +14,12 @@ struct HomeView: View {
     @State private var viewModel: JournalViewModel?
     @State private var searchText = ""
     @State private var showingSearch = false
+    @State private var sortOrder: SortOrder = .newest
     
     var filteredEntries: [JournalEntry] {
         guard let viewModel = viewModel else { return [] }
-        return viewModel.searchJournalEntries(searchText: searchText)
+        let results = viewModel.searchJournalEntries(searchText: searchText)
+        return sortOrder == .newest ? results.sorted(by: { $0.date > $1.date }) : results.sorted(by: { $0.date < $1.date })
     }
     
     var body: some View {
@@ -31,7 +33,7 @@ struct HomeView: View {
                 
                 // 일기 목록 또는 빈 상태
                 if let viewModel = viewModel, !viewModel.journalEntries.isEmpty {
-                    JournalListView(entries: filteredEntries, viewModel: viewModel)
+                    JournalListView(entries: filteredEntries, viewModel: viewModel, sortOrder: sortOrder)
                 } else {
                     EmptyStateView()
                 }
@@ -57,9 +59,14 @@ struct HomeView: View {
                         }
                     }
                     
-                    Button(action: {
-                        // TODO: 더보기 기능
-                    }) {
+                    Menu {
+                        Button("최신순") {
+                            sortOrder = .newest
+                        }
+                        Button("오래된순") {
+                            sortOrder = .oldest
+                        }
+                    } label: {
                         ZStack {
                             Circle()
                                 .fill(Color(.systemGray5))
@@ -144,6 +151,7 @@ struct SearchBar: View {
 struct JournalListView: View {
     let entries: [JournalEntry]
     let viewModel: JournalViewModel
+    let sortOrder: SortOrder
     @State private var selectedEntry: JournalEntry?
     @State private var showingWriteView = false
     
@@ -192,7 +200,9 @@ struct JournalListView: View {
                             Spacer()
                         }
                         
-                        ForEach(groupedEntries[monthKey]?.sorted(by: { $0.date > $1.date }) ?? []) { entry in
+                        ForEach((groupedEntries[monthKey] ?? []).sorted(by: {
+                            sortOrder == .newest ? $0.date > $1.date : $0.date < $1.date
+                        })) { entry in
                             JournalEntryRow(entry: entry) {
                                 selectedEntry = entry
                                 showingWriteView = true

@@ -116,3 +116,7 @@ class JournalViewModel {
     }
 }
 
+enum SortOrder {
+    case newest
+    case oldest
+}

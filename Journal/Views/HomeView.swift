@@ -172,6 +172,15 @@ struct JournalListView: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
+                // 통계
+                StatisticsView(
+                    totalEntries: totalEntries,
+                    totalWords: totalWords,
+                    continuousDay: continuousDay
+                )
+                .padding(.horizontal)
+                .padding(.top, 16)
+                
                 ForEach(groupedEntries.keys.sorted(by: >), id: \.self) { monthKey in
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {

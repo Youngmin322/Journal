@@ -281,70 +281,74 @@ struct JournalEntryRow: View {
                     
                     Spacer()
                     
-                    Button(action: {
-                        // TODO: 메뉴 액션
-                    }) {
+                    Menu {
+                        Button("편집") {
+                            onTap()
+                        }
+                        Button("삭제", role: .destructive) {
+                            // 삭제 로직은 상위 View에서 처리하도록 수정 필요
+                        }
+                    } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.secondary)
                             .font(.system(size: 16))
                     }
                 }
                 
-                Text(contentPreview)
-                    .font(.body)
-                    .foregroundColor(.primary)
-                    .lineLimit(3)
-                    .multilineTextAlignment(.leading)
-                
-                Text(formatDate(entry.date))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Button(action: onTap) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(contentPreview)
+                            .font(.body)
+                            .foregroundColor(.primary)
+                            .lineLimit(3)
+                        
+                        Text(formatDate(entry.date))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
             .padding(16)
             .background(Color(.systemBackground))
             .cornerRadius(12)
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
 
 // MARK: - 빈 상태 뷰
 struct EmptyStateView: View {
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack {
-                    Spacer(minLength: 0)
-
-                    VStack(spacing: 25) {
-                        Image("JournalIcon")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 80, height: 80)
-                            .cornerRadius(20)
-                        
-                        VStack(spacing: 12) {
-                            Text("일기 쓰기 시작하기")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.primary)
-                            
-                            VStack(spacing: 4) {
-                                Text("나만의 일기를 작성해 보세요.")
-                                Text("시작하려면 더하기 버튼을 탭하세요.")
-                            }
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 20)
+        ScrollView {
+            VStack(spacing: 25) {
+                Spacer().frame(height: 100)
+                
+                Image("JournalIcon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 80)
+                    .cornerRadius(20)
+                
+                VStack(spacing: 12) {
+                    Text("일기 쓰기 시작하기")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.primary)
                     
-                    Spacer(minLength: 0)
+                    VStack(spacing: 4) {
+                        Text("나만의 일기를 작성해 보세요.")
+                        Text("시작하려면 더하기 버튼을 탭하세요.")
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
                 }
-                .frame(minHeight: geometry.size.height)
+                
+                Spacer().frame(height: 300)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 20)
         }
     }
 }

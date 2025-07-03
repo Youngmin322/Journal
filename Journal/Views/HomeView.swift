@@ -311,35 +311,40 @@ struct JournalEntryRow: View {
 // MARK: - 빈 상태 뷰
 struct EmptyStateView: View {
     var body: some View {
-        ScrollView {
-            VStack(spacing: 25) {
-                Spacer().frame(height: 100)
-                
-                Image("JournalIcon")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 80, height: 80)
-                    .cornerRadius(20)
-                
-                VStack(spacing: 12) {
-                    Text("일기 쓰기 시작하기")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.primary)
-                    
-                    VStack(spacing: 4) {
-                        Text("나만의 일기를 작성해 보세요.")
-                        Text("시작하려면 더하기 버튼을 탭하세요.")
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    Spacer(minLength: 0)
+
+                    VStack(spacing: 25) {
+                        Image("JournalIcon")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 80, height: 80)
+                            .cornerRadius(20)
+                        
+                        VStack(spacing: 12) {
+                            Text("일기 쓰기 시작하기")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                            
+                            VStack(spacing: 4) {
+                                Text("나만의 일기를 작성해 보세요.")
+                                Text("시작하려면 더하기 버튼을 탭하세요.")
+                            }
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                        }
                     }
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    
+                    Spacer(minLength: 0)
                 }
-                
-                Spacer().frame(height: 300)
+                .frame(minHeight: geometry.size.height)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 20)
         }
     }
 }

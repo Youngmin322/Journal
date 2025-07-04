@@ -110,6 +110,7 @@ struct HomeView: View {
         }
     }
 }
+
 // MARK: - 검색바
 struct SearchBar: View {
     @Binding var text: String
@@ -165,6 +166,7 @@ struct JournalListView: View {
             formatter.string(from: entry.date)
         }
     }
+    
     // 작성된 일기 통계 계산
     var totalEntries: Int { entries.count }
     var totalWords: Int {
@@ -200,10 +202,14 @@ struct JournalListView: View {
                             Spacer()
                         }
                         
-                        ForEach((groupedEntries[monthKey] ?? []).sorted(by: {
-                            sortOrder == .newest ? $0.date > $1.date : $0.date < $1.date
-                        })) { entry in
-                            JournalEntryRow(entry: entry) {
+                        // 복잡한 표현식을 분리
+                        let monthEntries = groupedEntries[monthKey] ?? []
+                        let sortedEntries = sortOrder == .newest ?
+                            monthEntries.sorted(by: { $0.date > $1.date }) :
+                            monthEntries.sorted(by: { $0.date < $1.date })
+                        
+                        ForEach(sortedEntries) { entry in
+                            JournalEntryRow(entry: entry, viewModel: viewModel) {
                                 selectedEntry = entry
                                 showingWriteView = true
                             }
@@ -252,7 +258,15 @@ struct JournalListView: View {
 // MARK: - 일기 항목 행
 struct JournalEntryRow: View {
     let entry: JournalEntry
-    let onTap: () -> Void
+    let viewModel: JournalViewModel
+    let onEdit: () -> Void
+    @State private var showingWriteView = false
+    
+    init(entry: JournalEntry, viewModel: JournalViewModel, onEdit: @escaping () -> Void) {
+        self.entry = entry
+        self.viewModel = viewModel
+        self.onEdit = onEdit
+    }
     
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -270,7 +284,7 @@ struct JournalEntryRow: View {
     }
     
     var body: some View {
-        Button(action: onTap) {
+        NavigationLink(destination: DetailView(entry: entry, viewModel: viewModel)) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text(entry.title)
@@ -283,37 +297,36 @@ struct JournalEntryRow: View {
                     
                     Menu {
                         Button("편집") {
-                            onTap()
+                            onEdit()
                         }
                         Button("삭제", role: .destructive) {
-                            // 삭제 로직은 상위 View에서 처리하도록 수정 필요
+                            // 삭제 기능은 DetailView에서 처리
                         }
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.secondary)
                             .font(.system(size: 16))
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
                 
-                Button(action: onTap) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(contentPreview)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .lineLimit(3)
-                        
-                        Text(formatDate(entry.date))
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(contentPreview)
+                        .font(.body)
+                        .foregroundColor(.primary)
+                        .lineLimit(3)
+                    
+                    Text(formatDate(entry.date))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(16)
             .background(Color(.systemBackground))
             .cornerRadius(12)
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

@@ -57,6 +57,18 @@ class JournalViewModel {
         }
     }
     
+    // MARK: 일기 삭제
+    func deleteJournalEntry(_ entry: JournalEntry) {
+        modelContext.delete(entry)
+        
+        do {
+            try modelContext.save()
+            fetchJournalEntries()
+        } catch {
+            print("일기 삭제 실패: \(error)")
+        }
+    }
+    
     // MARK: 검색 기능
     func searchJournalEntries(searchText: String) -> [JournalEntry] {
         if searchText.isEmpty {

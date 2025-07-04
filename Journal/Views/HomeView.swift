@@ -58,6 +58,8 @@ struct HomeView: View {
                                 .foregroundColor(.primary)
                         }
                     }
+                    .disabled(viewModel?.journalEntries.isEmpty ?? true)
+                    .opacity(viewModel?.journalEntries.isEmpty ?? true ? 0.4 : 1)
                     
                     Menu {
                         Button("최신순") {

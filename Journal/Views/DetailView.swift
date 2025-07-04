@@ -89,10 +89,7 @@ struct DetailView: View {
     }
     
     private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy년 M월 d일 EEEE"
-        return formatter.string(from: date)
+        return DateFormatter.journalFull.string(from: date)
     }
     
     private func deleteEntry() {

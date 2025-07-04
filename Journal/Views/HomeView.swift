@@ -160,9 +160,8 @@ struct JournalListView: View {
     
     var groupedEntries: [String: [JournalEntry]] {
         _ = Calendar.current
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy년 M월"
+        let formatter = DateFormatter.journalFull
+        formatter.dateFormat = "yyyy년 M월" 
         
         return Dictionary(grouping: entries) { entry in
             formatter.string(from: entry.date)
@@ -271,10 +270,7 @@ struct JournalEntryRow: View {
     }
     
     private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "M월 d일 EEEE"
-        return formatter.string(from: date)
+        return DateFormatter.journalFull.string(from: date)
     }
     
     private var contentPreview: String {

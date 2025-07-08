@@ -45,9 +45,12 @@ struct JournalEntryRow: View {
                             onDelete()
                         }
                     } label: {
-                        Image(systemName: "ellipsis")
-                            .foregroundColor(.secondary)
-                            .font(.system(size: 16))
+                        ZStack {
+                            Image(systemName: "ellipsis")
+                                .foregroundColor(.secondary)
+                                .font(.system(size: 16))
+                                .padding(8)
+                        }
                     }
                     .buttonStyle(PlainButtonStyle())
                 }

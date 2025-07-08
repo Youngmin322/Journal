@@ -8,9 +8,10 @@
 import SwiftUI
 import SwiftData
 
-
 @main
 struct JournalApp: App {
+    @StateObject private var authVM = AuthViewModel()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             JournalEntry.self,
@@ -26,7 +27,11 @@ struct JournalApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            if authVM.isUnlocked {
+                HomeView()
+            } else {
+                LockScreenView(authVM: authVM)
+            }
         }
         .modelContainer(sharedModelContainer)
     }

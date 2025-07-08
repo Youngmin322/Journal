@@ -11,6 +11,7 @@ import SwiftData
 @main
 struct JournalApp: App {
     @StateObject private var authVM = AuthViewModel()
+    @Environment(\.scenePhase) private var scenePhase
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -31,6 +32,13 @@ struct JournalApp: App {
                 HomeView()
             } else {
                 LockScreenView(authVM: authVM)
+            }
+        }
+        .onChange(of: scenePhase) {
+            if scenePhase == .active {
+                // 앱이 포그라운드로 돌아올 때 다시 Face ID 요청
+                authVM.isUnlocked = false
+                authVM.authenicate()
             }
         }
         .modelContainer(sharedModelContainer)

@@ -15,6 +15,11 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var showingSearch = false
     @State private var sortOrder: SortOrder = .newest
+    @State private var showExportSheet = false
+    @State private var startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
+    @State private var endDate = Date()
+    @State private var pdfURL: URL?
+    @State private var showShareSheet = false
     
     var filteredEntries: [JournalEntry] {
         guard let viewModel = viewModel else { return [] }
@@ -67,6 +72,10 @@ struct HomeView: View {
                         }
                         Button("오래된순") {
                             sortOrder = .oldest
+                        }
+                        Divider()
+                        Button("PDF로 내보내기") {
+                            showExportSheet = true
                         }
                     } label: {
                         ZStack {

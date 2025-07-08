@@ -12,6 +12,13 @@ class AuthViewModel: ObservableObject {
     @Published var isUnlocked = false
     @Published var authError: String?
     
+    private var lastAuthenticatedAt: Date? = nil
+    
+    var shouldReauthenticate: Bool {
+        guard let last = lastAuthenticatedAt else { return true }
+        return Date().timeIntervalSince(last) > 30
+    }
+    
     func authenicate() {
         let context = LAContext()
         var error: NSError?
@@ -21,11 +28,15 @@ class AuthViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.isUnlocked = success
                     self.authError = success ? nil : error?.localizedDescription
+                    if success {
+                        self.lastAuthenticatedAt = Date()
+                    }
                 }
             }
         } else {
             DispatchQueue.main.async {
                 self.authError = "Face ID를 사용할 수 없습니다."
+                self.lastAuthenticatedAt = Date()
             }
         }
     }

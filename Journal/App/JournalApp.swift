@@ -36,9 +36,10 @@ struct JournalApp: App {
         }
         .onChange(of: scenePhase) {
             if scenePhase == .active {
-                // 앱이 포그라운드로 돌아올 때 다시 Face ID 요청
-                authVM.isUnlocked = false
-                authVM.authenicate()
+                if authVM.shouldReauthenticate {
+                    authVM.isUnlocked = false
+                    authVM.authenicate()
+                }
             }
         }
         .modelContainer(sharedModelContainer)

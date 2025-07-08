@@ -108,9 +108,19 @@ struct HomeView: View {
                 }
                 .padding(.bottom, 40)
             }
+            .sheet(isPresented: $showExportSheet) {
+                DateRangePickerSheet(startDate: $startDate, endDate: $endDate) {
+                    exportJournalAsPDF()
+                }
+            }
             .sheet(isPresented: $showWriting) {
                 if let viewModel = viewModel {
                     WriteView(viewModel: viewModel)
+                }
+            }
+            .sheet(isPresented: $showShareSheet) {
+                if let pdfURL = pdfURL {
+                    ShareSheet(activityItems: [pdfURL])
                 }
             }
             .onAppear {
@@ -120,9 +130,90 @@ struct HomeView: View {
             }
         }
     }
+    
+    func exportJournalAsPDF() {
+        guard let viewModel = viewModel else { return }
+
+        let entriesToExport = viewModel.journalEntries.filter {
+            $0.date >= startDate && $0.date <= endDate
+        }.sorted(by: { $0.date < $1.date })
+
+        let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792)) // A4 크기
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("JournalExport.pdf")
+
+        do {
+            try pdfRenderer.writePDF(to: url, withActions: { context in
+                for entry in entriesToExport {
+                    context.beginPage()
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineSpacing = 8
+
+                    let attrs: [NSAttributedString.Key: Any] = [
+                        .font: UIFont.systemFont(ofSize: 16),
+                        .paragraphStyle: paragraphStyle
+                    ]
+
+                    let text = """
+                    📅 날짜: \(entry.date.formatted(date: .long, time: .shortened))
+
+                    \(entry.content)
+                    """
+
+                    text.draw(in: CGRect(x: 20, y: 20, width: 572, height: 752), withAttributes: attrs)
+                }
+            })
+
+            self.pdfURL = url
+            self.showShareSheet = true
+        } catch {
+            print("PDF 생성 실패: \(error)")
+        }
+    }
 }
 
 #Preview {
     HomeView()
         .modelContainer(for: JournalEntry.self, inMemory: true)
+}
+
+import SwiftUI
+
+struct DateRangePickerSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var startDate: Date
+    @Binding var endDate: Date
+    var onExport: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                DatePicker("시작 날짜", selection: $startDate, displayedComponents: .date)
+                DatePicker("종료 날짜", selection: $endDate, displayedComponents: .date)
+            }
+            .navigationTitle("내보낼 범위 선택")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("취소") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("내보내기") {
+                        onExport()
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }

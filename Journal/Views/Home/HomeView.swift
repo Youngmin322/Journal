@@ -138,7 +138,7 @@ struct HomeView: View {
             $0.date >= startDate && $0.date <= endDate
         }.sorted(by: { $0.date < $1.date })
 
-        let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792)) // A4 크기
+        let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792))
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("JournalExport.pdf")
 
         do {
@@ -170,13 +170,6 @@ struct HomeView: View {
         }
     }
 }
-
-#Preview {
-    HomeView()
-        .modelContainer(for: JournalEntry.self, inMemory: true)
-}
-
-import SwiftUI
 
 struct DateRangePickerSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -216,4 +209,9 @@ struct ShareSheet: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+#Preview {
+    HomeView()
+        .modelContainer(for: JournalEntry.self, inMemory: true)
 }

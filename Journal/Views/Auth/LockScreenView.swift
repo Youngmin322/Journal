@@ -26,7 +26,7 @@ struct LockScreenView: View {
                 Image(systemName: "lock.circle.fill")
                     .resizable()
                     .frame(width: 60, height: 60)
-                    .foregroundColor(Color("LockColor"))
+                    .foregroundColor(Color("MainColor"))
                 
                 Text("일기를 보려면 Face ID를 \n 사용하십시오.")
                     .bold()

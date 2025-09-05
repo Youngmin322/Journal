@@ -89,24 +89,24 @@ struct HomeView: View {
                     }
                 }
             }
-            .overlay(alignment: .bottom) {
+            .overlay(alignment: .bottomTrailing) {
                 // 플로팅 버튼
                 Button(action: {
                     showWriting = true
                 }) {
                     ZStack {
                         Circle()
-                            .fill(Color.white)
+                            .fill(Color("MainColor"))
                             .frame(width: 56, height: 56)
                             .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
                         
                         Image(systemName: "plus")
                             .font(.title2)
                             .fontWeight(.bold)
-                            .foregroundColor(.purple)
+                            .foregroundColor(.white)
                     }
                 }
-                .padding(.bottom, 40)
+                .padding(.trailing, 20)
             }
             .sheet(isPresented: $showExportSheet) {
                 DateRangePickerSheet(startDate: $startDate, endDate: $endDate) {

@@ -54,7 +54,8 @@ struct WriteView: View {
                         Button("완료") {
                             saveJournalEntry()
                         }
-                        .foregroundColor(.purple)
+                        .foregroundColor(isFormValid ? .purple : .gray)
+                        .opacity(isFormValid ? 1.0 : 0.5)
                         .disabled(!isFormValid)
                     }
                 }

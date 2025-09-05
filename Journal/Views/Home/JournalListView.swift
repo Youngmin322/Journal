@@ -84,7 +84,6 @@ struct JournalListView: View {
                     }
                 }
                 
-                // 하단 여백 (플로팅 버튼 공간)
                 Spacer().frame(height: 100)
             }
             .padding(.top, 16)
@@ -123,7 +122,7 @@ struct JournalListView: View {
             
             let daysDifference = calendar.dateComponents([.day], from: nextDate, to: currentDate).day ?? 0
             
-            if daysDifference <= 2 { // 2일 이내
+            if daysDifference <= 2 {
                 continuousCount += 1
             } else {
                 break

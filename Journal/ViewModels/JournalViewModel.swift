@@ -90,18 +90,17 @@ class JournalViewModel {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         
-        // 다양한 날짜 형식으로 검색
         let dateFormats = [
-            "yyyy년 M월 d일",      // 2025년 7월 1일
-            "yyyy-MM-dd",          // 2025-07-01
-            "M월 d일",             // 7월 1일
-            "yyyy년 M월",          // 2025년 7월
-            "M월",                 // 7월
-            "yyyy년",              // 2025년
-            "yyyy.M.d",            // 2025.7.1
-            "yy.M.d",              // 25.7.1
-            "EEEE",                // 화요일
-            "E"                    // 화
+            "yyyy년 M월 d일",
+            "yyyy-MM-dd",
+            "M월 d일",
+            "yyyy년 M월",
+            "M월",
+            "yyyy년",
+            "yyyy.M.d",
+            "yy.M.d",
+            "EEEE",
+            "E"
         ]
         
         for format in dateFormats {
@@ -112,7 +111,6 @@ class JournalViewModel {
             }
         }
         
-        // 숫자만으로 검색 (년도, 월, 일)
         let calendar = Calendar.current
         let year = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)

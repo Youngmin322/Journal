@@ -14,7 +14,7 @@ final class JournalEntry {
     var content: String
     var date: Date
     var imageData: Data?
-
+    
     init(title: String, content: String, date: Date = .now, imageData: Data? = nil) {
         self.title = title
         self.content = content

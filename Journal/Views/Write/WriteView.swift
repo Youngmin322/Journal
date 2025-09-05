@@ -12,26 +12,26 @@ struct WriteView: View {
     @State private var title: String = ""
     @State private var content: String = ""
     @State private var selectedDate: Date = Date()
-
+    
     let viewModel: JournalViewModel
     let editingEntry: JournalEntry?
-
+    
     init(viewModel: JournalViewModel, editingEntry: JournalEntry? = nil) {
         self.viewModel = viewModel
         self.editingEntry = editingEntry
-
+        
         if let entry = editingEntry {
             _title = State(initialValue: entry.title)
             _content = State(initialValue: entry.content)
             _selectedDate = State(initialValue: entry.date)
         }
     }
-
+    
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -65,9 +65,9 @@ struct WriteView: View {
             }
             .padding(.horizontal)
             .padding(.vertical, 12)
-
+            
             Divider()
-
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // 제목
@@ -84,7 +84,7 @@ struct WriteView: View {
                             .padding(.horizontal, 4)
                     }
                     Divider()
-
+                    
                     ZStack(alignment: .topLeading) {
                         if content.isEmpty {
                             VStack {
@@ -105,7 +105,7 @@ struct WriteView: View {
                             .scrollContentBackground(.hidden)
                             .background(Color.clear)
                     }
-
+                    
                     Spacer(minLength: 100)
                 }
                 .padding(.horizontal)
@@ -128,11 +128,11 @@ struct WriteView: View {
             }
         }
     }
-
+    
     private func saveJournalEntry() {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
-
+        
         if let editingEntry = editingEntry {
             viewModel.updateJournalEntry(
                 editingEntry,
@@ -149,10 +149,10 @@ struct WriteView: View {
                 imageData: nil
             )
         }
-
+        
         dismiss()
     }
-
+    
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")

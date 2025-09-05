@@ -63,8 +63,8 @@ struct JournalListView: View {
                         // 월별 일기 목록
                         let monthEntries = groupedEntries[monthKey] ?? []
                         let sortedEntries = sortOrder == .newest ?
-                            monthEntries.sorted(by: { $0.date > $1.date }) :
-                            monthEntries.sorted(by: { $0.date < $1.date })
+                        monthEntries.sorted(by: { $0.date > $1.date }) :
+                        monthEntries.sorted(by: { $0.date < $1.date })
                         
                         ForEach(sortedEntries, id: \.id) { entry in
                             JournalEntryRow(

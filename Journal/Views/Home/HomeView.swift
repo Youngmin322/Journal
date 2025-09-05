@@ -133,36 +133,36 @@ struct HomeView: View {
     
     func exportJournalAsPDF() {
         guard let viewModel = viewModel else { return }
-
+        
         let entriesToExport = viewModel.journalEntries.filter {
             $0.date >= startDate && $0.date <= endDate
         }.sorted(by: { $0.date < $1.date })
-
+        
         let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 612, height: 792))
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("JournalExport.pdf")
-
+        
         do {
             try pdfRenderer.writePDF(to: url, withActions: { context in
                 for entry in entriesToExport {
                     context.beginPage()
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.lineSpacing = 8
-
+                    
                     let attrs: [NSAttributedString.Key: Any] = [
                         .font: UIFont.systemFont(ofSize: 16),
                         .paragraphStyle: paragraphStyle
                     ]
-
+                    
                     let text = """
                     📅 날짜: \(entry.date.formatted(date: .long, time: .shortened))
-
+                    
                     \(entry.content)
                     """
-
+                    
                     text.draw(in: CGRect(x: 20, y: 20, width: 572, height: 752), withAttributes: attrs)
                 }
             })
-
+            
             self.pdfURL = url
             self.showShareSheet = true
         } catch {
@@ -176,7 +176,7 @@ struct DateRangePickerSheet: View {
     @Binding var startDate: Date
     @Binding var endDate: Date
     var onExport: () -> Void
-
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -203,11 +203,11 @@ struct DateRangePickerSheet: View {
 
 struct ShareSheet: UIViewControllerRepresentable {
     let activityItems: [Any]
-
+    
     func makeUIViewController(context: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
-
+    
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
